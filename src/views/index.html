@@ -95,35 +95,11 @@
 				</p>
 				<p style="text-align: left">
 					<b>Move:</b> WASD, Shift, Space<br />
-					<b>Open Page:</b> E <br />
-					<b>Remove Pages:</b> F <br />
 					<b>Look:</b> MOUSE
 				</p>
 			</div>
 		</div>
 	</div>
-<!-- 
-	<div id= 'gradient.vert'>
-		varying vec2 vUv;
-		void main(){
-			vUv = uv;
-			float depth = -1.; //or maybe 1. you can experiment
-			gl_Position = vec4(position.xy, depth, 1.);
-		}
-
-	</div>
-	<div id= 'gradient.frag'>
-		varying vec2 vUv;
-		uniform vec3 uColorA;
-		uniform vec3 uColorB;
-		void main(){
-		  gl_FragColor = vec4(
-			mix( uColorA, uColorB, vec3(vUv.y)),
-			1.
-		  );
-		}
-
-	</div> -->
 
 	<script src="/public/app.js" type="module"></script>
 
