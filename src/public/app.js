@@ -1,13 +1,7 @@
 //External Libraries
 import * as THREE from '/modules/three.module.js';
-import { PointerLockControls } from "/modules/PointerLockControls.js";
-import { GUI } from "/modules/dat.gui.module.js";
-import { GLTFLoader } from '/modules/GLTFLoader.js';
-import { EffectComposer } from '/modules/EffectComposer.js';
-import { RenderPass } from '/modules/RenderPass.js';
-import { UnrealBloomPass } from '/modules/UnrealBloomPass.js';
 import Stats from '/modules/stats.module.js';
-
+import { CSS3DRenderer, CSS3DObject } from "/modules/CSS3DRenderer.js";
 //Internal Libraries
 import { NoClipControls } from '/utils/NoClipControls.js'
 import { PhysicsObject } from '/utils/PhysicsObject.js'
@@ -19,14 +13,15 @@ let stats;
 let prevTime = performance.now();
 let physicsObjects = []
 let frameIndex = 0
-
+let labelRenderer;
+let iFrame
 init();
 animate();
 
 function init() {
     scene = new THREE.Scene();
     var loader = new THREE.TextureLoader(),
-        texture = loader.load("/static/sky.jpg");
+        texture = loader.load("/static/nightsky2.jpg");
     scene.background = texture
     scene.fog = new THREE.Fog(0xffffff, 100, 750);
 
@@ -39,6 +34,13 @@ function init() {
     renderer.setPixelRatio(window.devicePixelRatio);
     renderer.setSize(window.innerWidth, window.innerHeight);
     document.body.appendChild(renderer.domElement);
+
+    labelRenderer = new CSS3DRenderer();
+    labelRenderer.setSize(window.innerWidth, window.innerHeight);
+    labelRenderer.domElement.style.position = 'absolute';
+    labelRenderer.domElement.style.top = '0px';
+    document.body.appendChild(labelRenderer.domElement);
+
 
     // LIGHTS
     const light = new THREE.HemisphereLight(0xeeeeff, 0x777788, 0.75);
@@ -72,6 +74,25 @@ function init() {
         scene.add(mesh)
     }
 
+    let createPlane = function () {
+        let mat = new THREE.MeshPhongMaterial({
+            wireframe: false,
+            transparent: true,
+            depthWrite: false,
+            side: THREE.DoubleSide,
+            color: new THREE.Color(0x6a7699),
+            opacity: .2
+        });
+        let geo = new THREE.PlaneBufferGeometry(600, 600)
+        let mesh = new THREE.Mesh(geo, mat)
+        mesh.position.x = 0
+        mesh.position.y = -15
+        mesh.position.z = 0
+        mesh.rotation.x = Math.PI / 2
+        scene.add(mesh)
+    }
+    createPlane()
+
     let createStars = function () {
         let M = 28
         let N = 28
@@ -101,7 +122,7 @@ function init() {
 
 
     //Large Star
-    let p0 = new PhysicsObject(10000, 0, 0, -10, 0, 0, 0, 0, 1)
+    let p0 = new PhysicsObject(10000, 0, 0, 0, 0, 0, 0, 0, 1)
     p0.isStationary = true
     p0.density = 10000
 
@@ -116,7 +137,7 @@ function init() {
         let y_offset = 0
         let z_offset = 0
         let px = x_offset + (2 * Math.random() - 1) * radius
-        let py = y_offset + 0
+        let py = y_offset + (2 * Math.random() - 1) * radius / 2
         let pz = z_offset + (2 * Math.random() - 1) * radius
         let physicsObject = new PhysicsObject(1, px, py, pz, 0, 0, 0, .05, 1)
         physicsObjects.push(physicsObject)
@@ -128,8 +149,50 @@ function init() {
     console.log(physicsObjects)
 }
 
+let createFrame = function (url, _x, _y, _z) {
+    let mat = new THREE.MeshBasicMaterial({
+    });
+    let geo = new THREE.BoxGeometry(.5, .5, .5)
+    let mesh = new THREE.Mesh(geo, mat)
+    mesh.position.x = _x
+    mesh.position.y = _y
+    mesh.position.z = _z
 
+    var url = `https://en.wikipedia.org/wiki/Farran_Zerbe`
+    var html = [
 
+        '<div style="width:' + 0 + 'px; height:' + 0 + 'px;">',
+        '<iframe src="' + url + '" width="' + 800 + '" height="' + 800 + '">',
+        '</iframe>',
+        '</div>'
+
+    ].join('\n');
+
+    scene.add(mesh)
+
+    let frameScale = new THREE.Vector3(.01, .01, .01)
+
+    const frameDiv = document.createElement('div');
+    frameDiv.className = 'label';
+    frameDiv.innerHTML = html;
+    frameDiv.style.marginTop = '-1em';
+    const frameLabel = new CSS3DObject(frameDiv);
+    frameLabel.scale.set(frameScale.x, frameScale.y, frameScale.z)
+    console.log('frameLabel', frameLabel)
+    frameLabel.position.set(_x, _y, _z);
+    frameLabel.position.x = -1
+    frameLabel.position.y = 17
+    frameLabel.position.z = -4
+    mesh.add(frameLabel);
+
+    // meshes.push(mesh)
+    // labels.push(frameLabel)
+    return mesh
+
+}
+
+iFrame = createFrame('Farran_Zerbe', 15,0,0)
+console.log(iFrame)
 function animate() {
     //Frame Start up
     requestAnimationFrame(animate);

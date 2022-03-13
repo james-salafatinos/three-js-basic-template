@@ -7,7 +7,7 @@ class PhysicsObject {
         this.pos = new THREE.Vector3(x, y, z)
         this.velocity = new THREE.Vector3(0, 0, 0)
         this.acceleration = new THREE.Vector3(ivx, ivy, ivz)
-        this.gravity = .00001
+        this.gravity = .000001
         this.dirVector = new THREE.Vector3()
         this.mesh
 
@@ -89,7 +89,7 @@ class PhysicsObject {
             this.mesh.material.color = new THREE.Color(`hsl(${50}, 100%, 100%)`);
 
         } else {
-            this.mesh.material.color = new THREE.Color(`hsl(${200 - (-1 * this.velocity.length()) * 10 ** 3}, 100%, 50%)`);
+            this.mesh.material.color = new THREE.Color(`hsl(${200 - (-1 * this.velocity.length()) * 10 ** 3.2}, 100%, 50%)`);
         }
 
 
