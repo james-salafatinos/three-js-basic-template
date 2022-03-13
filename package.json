@@ -2,17 +2,15 @@
   "//1": "describes your app and its dependencies",
   "//2": "https://docs.npmjs.com/files/package.json",
   "//3": "updating this file will download and update your packages",
-  "name": "datahouse",
+  "name": "porftolio-gallery",
   "version": "0.0.1",
-  "description": "A simple Node app built on Express, instantly up and running.",
+  "description": "A simple portfolio gallery.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "build": "grunt"
+    "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.16.4",
-    "grunt": "^1.4.1"
+    "express": "^4.16.4"
   },
   "engines": {
     "node": "8.x"
@@ -28,11 +26,6 @@
   "directories": {
     "test": "tests"
   },
-  "author": "",
-  "devDependencies": {
-    "grunt-contrib-concat": "^2.0.0",
-    "grunt-contrib-watch": "^1.1.0",
-    "grunt-express-server": "^0.5.4",
-    "grunt-run": "^0.8.1"
-  }
+  "author": ""
+
 }

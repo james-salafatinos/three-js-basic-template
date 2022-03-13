@@ -13,7 +13,7 @@ class NoClipControls extends PointerLockControls {
         this.direction = new Vector3();
         this.gravity = 1
         this.flyRelease = 20
-        this.flySpeed = 100
+        this.flySpeed = 1000
         this._moveForward = false;
         this._moveBackward = false;
         this._moveLeft = false;
