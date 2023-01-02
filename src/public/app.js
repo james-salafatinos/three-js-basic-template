@@ -3,14 +3,11 @@ import * as THREE from "/modules/three.module.js";
 import Stats from "/modules/stats.module.js";
 //Internal Libraries
 import { NoClipControls } from "/utils/NoClipControls.js";
-import { PhysicsObject } from "/utils/PhysicsObject.js";
-
 //THREE JS
 let camera, scene, renderer, composer, controls;
 let stats;
 //Required for NOCLIPCONTROLS
 let prevTime = performance.now();
-let physicsObjects = [];
 let frameIndex = 0;
 
 init();
@@ -127,48 +124,11 @@ function init() {
     scene.add(particles);
   };
   createStars();
-
-  //Large Star
-  let p0 = new PhysicsObject(10000, 0, 0, 0, 0, 0, 0, 0, 1);
-  p0.isStationary = true;
-  p0.density = 10000;
-
-  //Black Hole
-  physicsObjects.push(p0);
-  scene.add(p0.Sphere());
-
-  //PhyscsObject creation loop
-  for (let i = 0; i < 100; i++) {
-    let radius = 50;
-    let x_offset = 0;
-    let y_offset = 0;
-    let z_offset = 0;
-    let px = x_offset + (2 * Math.random() - 1) * radius;
-    let py = y_offset + (2 * Math.random() - 1) * radius;
-    let pz = z_offset + (2 * Math.random() - 1) * radius;
-    let physicsObject = new PhysicsObject(1, px, py, pz, 0, 0, 0, 0.01, 1);
-    physicsObjects.push(physicsObject);
-    scene.add(physicsObject.Sphere());
-  }
 }
 
 function animate() {
   //Frame Start up
   requestAnimationFrame(animate);
-
-  //Force Application
-  if (frameIndex % 1 == 0) {
-    for (let i = 0; i < physicsObjects.length; i++) {
-      for (let j = 0; j < physicsObjects.length; j++) {
-        if (i !== j) {
-          let f = physicsObjects[i].attract(physicsObjects[j]);
-          physicsObjects[i].applyForce(f);
-          physicsObjects[i].updatePhysics();
-          physicsObjects[i].updateGeometry();
-        }
-      }
-    }
-  }
 
   const time = performance.now();
   controls.update(time, prevTime);
